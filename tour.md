@@ -63,18 +63,6 @@ For a thorough introduction, please take a look at our [build system tutorial](h
 
 Variables are defined with `let`:
 
-<<<<<<< HEAD
-```moonbit live
-let e = 2.718281828459045 // double
-let int_min = -2147483648 // int
-let int_max: Int = 2147483647 // explicit type annotation
-let tuple = (1, 2)
-let array = [1,2,3,4,5]
-let array = [4,5,6,7,8] // rebinding (redefine) `array`
-array = [4,5,6,7,8] // WRONG. `let` creates a const binding.
-let mut mut_array = [1,2,3,4,5]
-mut_array = [4,5,6,7,8]
-=======
 ```moonbit
 let e = 2.718281828459045 // double
 let int_min = -2147483648 // int
@@ -90,7 +78,6 @@ fn init {
   mut_array = [4, 5, 6, 7, 8]
   println(mut_array)
 }
->>>>>>> refining-ci
 ```
 
 MoonBit is a strictly typed language with type inference. In the example above, `let`
@@ -104,12 +91,8 @@ By default, the `let` - binding creates an immutable reference to a value. That 
 Function is just a piece of code that takes some inputs and produce a result. We may define a function using the keyword `fn` (function name in MoonBit should not begin with uppercase letters A-Z):
 
 ```moonbit
-<<<<<<< HEAD
-fn Identity[T](x: T) -> T { // WRONG: violates naming convention, change to `identity`
-=======
 fn identity[T](x: T) -> T {
   // `Identity` won't work as it violates naming convention
->>>>>>> refining-ci
   x
 }
 ```
@@ -121,17 +104,6 @@ We write a arrow `->` before the return type to show the nature of a function: a
 
 > The word _expression_ is loosely used. Intuitively, An expression is something with a value we care about.
 
-<<<<<<< HEAD
-Consequently, a function type is denoted `(S) -> T` where `S` (within parenthesis) is the parameter type and `T` is the return type. 
-Functions in MoonBit are first-class, meaning it's always possible to pass functions around if you
-get the type right:
-
-```moonbit live
-fn compose[S, T, U](f : (T) -> U, g : (S) -> T) -> (S) -> U {
-  fn(x : S) { f(g(x)) } // returns a composition of `f` and `g`
-
-  // moonbit also provides the pipe `|>` operator, 
-=======
 Consequently, a function type is denoted `(S) -> T` where `S` (within parenthesis) is the parameter type and `T` is the return type.
 Functions in MoonBit are first-class, meaning it's always possible to pass functions around if you
 get the type right:
@@ -141,7 +113,6 @@ fn compose[S, T, U](f : (T) -> U, g : (S) -> T) -> (S) -> U {
   let composition = fn(x : S) { f(g(x)) } // returns a composition of `f` and `g`
 
   // moonbit also provides the pipe `|>` operator,
->>>>>>> refining-ci
   // similar to a lot of functional languages.
   fn(x : S) { g(x) |> f } // equivalent
 }
@@ -235,19 +206,11 @@ fn to_string(self : User) -> String {
 fn to_string[T: Printable](self : List[T]) -> String {
   let string_aux = to_string_aux(self)
   // function arguments can have label
-<<<<<<< HEAD
-  "[" + string_aux.substring(end = string_aux.length() - 1) + "]" 
-}
-
-// polymorphic functions have to be toplevel.
-fn to_string_aux[T: Printable](self: List[T]) -> String{ 
-=======
   "[" + string_aux.substring(end = string_aux.length() - 1) + "]"
 }
 
 // polymorphic functions have to be toplevel.
 fn to_string_aux[T: Printable](self: List[T]) -> String{
->>>>>>> refining-ci
   match self {
     Nil => ""
     Cons(x,xs) => "\(x) " + to_string_aux(xs)
@@ -267,11 +230,7 @@ We use `<T extends Printable>` in Java to constrain the type of list element to 
 
 In the example above we use the `match` expression, a core feature of MoonBit
 (and many other functional programming languages.) In short, we use pattern matching
-<<<<<<< HEAD
-to _destructure_ (to strip the encapsulation of) a structure. 
-=======
 to _destructure_ (to strip the encapsulation of) a structure.
->>>>>>> refining-ci
 
 We may express the above `match` code as
 
