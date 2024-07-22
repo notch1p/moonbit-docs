@@ -11,15 +11,25 @@ on:
 jobs:
   markdown-lint:
     runs-on: ubuntu-latest
+    env:
+      FAIL: 0
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - name: install
+      - name: install moonbit runtime
         run: |
-          /bin/bash -c "$(curl -fsSL https://cli.moonbitlang.cn/install/unix.sh)"
+          /bin/bash -c "$(curl -fsSL https://cli.moonbitlang.com/install/unix.sh)"
           echo "$HOME/.moon/bin" >> $GITHUB_PATH
           npm install -g @moonbit/markdown-linter
-      - name: lint
-        run: find . -name '*.md' | while read file; do echo "========in $file, mdlint yields========"; mdlint "$file"; done
+      - name: lint markdowns
+        run: |
+          find . -name '*.md' | while read file; do
+            echo "========mdlint results for $file========";
+            mdlint "$file" || FAIL=$?;
+            if [[ $FAIL -eq 1 ]]; then
+              echo "========mdlint failed for $file========"
+            fi
+          done
+          if [[ $FAIL -eq 1 ]]; then exit 1; fi
