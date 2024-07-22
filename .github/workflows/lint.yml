@@ -1,0 +1,25 @@
+name: lint markdown files
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    paths:
+      - examples
+
+jobs:
+  markdown-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: install
+        run: |
+          /bin/bash -c "$(curl -fsSL https://cli.moonbitlang.cn/install/unix.sh)"
+          echo "$HOME/.moon/bin" >> $GITHUB_PATH
+          npm install -g @moonbit/markdown-linter
+      - name: lint
+        run: find . -name '*.md' | while read file; do echo "========in $file, mdlint yields========"; mdlint "$file"; done
