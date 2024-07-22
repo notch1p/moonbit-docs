@@ -7,9 +7,21 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@master
-      - name: Run GitHub File Sync
-        uses: hirotomoyamada/repo-file-sync-action@main
-        with:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+    - uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.PAT_TOKEN }}
+    - name: Update JSON Schema
+      run: |
+        echo "[INFO] Getting JSON schema from moonbitlang/moon"
+        curl 'https://raw.githubusercontent.com/moonbitlang/moon/main/crates/moonbuild/template/pkg.schema.json' > pkg.schema.json
+        curl 'https://raw.githubusercontent.com/moonbitlang/moon/main/crates/moonbuild/template/mod.schema.json' > mod.schema.json
+        echo "[INFO] Setting up git global config"
+        git config --global user.email "${{ secrets.EMAIL }}"
+        git config --global user.name "${{ secrets.USERNAME }}"
+        echo "[INFO] Setting up remote"
+        git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}
+        echo "[INFO] Staging changes"
+        git stage .
+        echo "[INFO] Write Commit"
+        git commit -m "[AUTO] Syncing json from moon - Triggered by Github Workflows"
+        git push
